@@ -1,8 +1,3 @@
-"""
-This is a simple echo agent that repeats what the user says.
-It is a good example of how to use the OpenAI Agents SDK.
-It is also a good example of how to use the OpenAI API with Gemini.
-"""
 import asyncio
 import os
 from dotenv import load_dotenv
@@ -37,27 +32,42 @@ config = RunConfig(
 
 async def main():
     """
-Creates and runs an Echo Agent using the OpenAI Agentic SDK.
+    Creates and runs a Helpful Assistant using the OpenAI Agentic SDK.
 
-This function:
-- Prompts the user for input via the command line.
-- Initializes an Agent with instructions to echo the user's input exactly.
-- Uses the Runner to execute the agent with the given input.
-- Prints the agent's echoed response back to the console.
+    This function performs the following:
+    - Prompts the user for input via the command line.
+    - Initializes an Agent with instructions to accurately and efficiently fulfill the user's request.
+    - Executes the Agent using the Runner with the provided input and external configuration.
+    - Prints the Agent’s final output (response) to the console.
 
-The agent uses the specified model and configuration defined externally.
-"""
-    print("🤖 Echo Agent Ready!")
+    The Agent uses a custom OpenAI-compatible model and configuration loaded from environment variables.
+    """
+    print("🤖 Helpful Assistant!")
     user_input = input("🗣️ Say something: ")
 
     agent = Agent(
         model=model,
-         name="Echo Agent",
-        instructions="Repeat exactly what the user says, word-for-word, without any additional commentary.",
-    )
+        name="Helpful Assistant",
+        instructions="""
+You are a helpful and intelligent assistant. Your goal is to understand and carry out the users request accurately and efficiently. Do exactly what the user asks—nothing more, nothing less—unless clarification is required.
 
+If the user request is ambiguous, ask thoughtful questions. If it is clear, proceed directly. Adapt your tone and style to match the user’s intent (formal, friendly, technical, etc.).
+
+Follow these rules:
+
+Understand the user's intent fully before acting.
+
+Don’t add extra commentary or opinions.
+
+Stick to the format the user implies or specifies.
+
+If the task is impossible or unsafe, explain why.
+
+If the user is asking for a task that involves steps (like code, writing, planning, etc.), complete it thoroughly.
+""",
+    )
     result = await Runner.run(agent, user_input, run_config=config)
-    print("\n🪞 Echoed Response:")
+    print("\n🪞 Response:")
     print(result.final_output)
 
 
